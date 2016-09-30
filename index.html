@@ -1,0 +1,159 @@
+<html>
+
+	<head>
+		
+		<title>Hello, World!</title>
+
+		<style>
+
+			#top
+			{
+				text-align: center;
+			}
+
+			#desc-textbox
+			{
+				width: 300px;
+				margin: 15px;
+			}
+
+			.list-item
+			{
+				text-align: center;
+
+				position: relative;
+				
+				left: 38%;
+				top: 5%;
+				
+				border-top:    1px solid gray;
+				border-bottom: 1px solid gray;
+
+				display: table;
+			}
+
+			.description
+			{
+				padding: 15px;
+				
+				float: left;
+
+				width: 300px;
+
+				/* if text is too long, truncate & insert an ellipsis */
+				white-space : nowrap;
+			    overflow : hidden;
+			    text-overflow : ellipsis;
+			}
+
+			.cancel
+			{
+				padding: 15px;
+
+				float: right;
+			}
+
+			.cancel:hover
+			{
+				font-weight : bold;
+			}
+
+		</style>
+
+		<script>
+
+			// id the most recently added item
+			var current_id = 0;
+
+			/* 
+			 * given the description of a list item,
+			 * returns an HTML string corresponding 
+			 * to a new item
+			*/
+
+			function getHTMLItem(item_description)
+			{
+
+				current_id_name = "'list-item" + String(current_id) + "'";
+
+				itemHTML = "";
+
+				itemHTML += "<div class='list-item' id ='list-item" + String(current_id) + "'>";
+				itemHTML += "<div class='description' id='desc" + String(current_id) + "'>";
+				itemHTML += item_description;
+				itemHTML += "</div>";
+				itemHTML += "<div " + "onclick=deleteItem(" + current_id_name + ") class='cancel' id='cancel" + String(current_id) + "'>X</div>";
+				itemHTML += "</div>";
+
+				current_id++;
+
+				return itemHTML;
+			}
+
+			function deleteItem(elemId)
+			{
+				const deletedItem = document.getElementById(elemId);
+
+				deletedItem.outerHTML = "";
+
+				//console.log(deletedItem.outerHTML);
+
+				//console.log(elemId);
+			}
+
+			function addItem()
+			{
+				const addItemTextbox = document.getElementById("add-item-textbox");
+				const listOfItems    = document.getElementById("top");
+
+				const listItemDesc   = addItemTextbox.value;
+
+				listOfItems.innerHTML += getHTMLItem(listItemDesc);
+			}
+
+		</script>
+
+	</head>
+
+	<body id='body'>
+
+		<div id="top">
+
+			<!-- Second, let's create a UI for adding a new item to the list -->
+
+			<div class="list-item" style="border-top: 0px; border-bottom: 1px gray solid;">
+				<input style="margin-bottom: 20px; margin-right: 13px; position : relative; top: 12px; left: 5px; width: 330px;" type="text" id="add-item-textbox"/>
+				<div style="background-color: rgb(0, 225, 0); padding: 10px; font-size: 15px;" class="cancel" id="add" onclick="addItem()">+</div>
+			</div>
+
+			<!-- First, we need to create a container for a single list item -->
+
+			<!--
+
+			<div class="list-item">
+				<div class="description" id="desc0">Create a todo item container! sdkjf ksdjf kldjs lfjsljdfksjdljsld lkasjldfj</div>
+				<div class="cancel" id="cancel9999">X</div>
+			</div>
+
+			<div class="list-item">
+				<div class="description" id="desc0">Transfer styling to CSS</div>
+				<div class="cancel" id="cancel9998">X</div>
+			</div>
+
+			<div class="list-item">
+				<div class="description" id="desc0">Finalize the design of the TextBox UI</div>
+				<div class="cancel" id="cancel9997">X</div>
+			</div>
+
+			<div class="list-item">
+				<div class="description" id="desc0">Start coding in JS!</div>
+				<div class="cancel" id="cancel9996">X</div>
+			</div>
+
+			-->
+
+		</div>
+
+	</body>
+
+</html>
