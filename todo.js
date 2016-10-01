@@ -10,8 +10,10 @@
  *
  * Missing Features
  * 
- *  - array structure to store list items
- * 	- persistent storage of to-do list
+ *  - disallow addition of 'empty' list items
+ *  - array data structure to store list items
+ * 	- persistent storage for entire to-do list
+ *  - use more sensible DOM methods (NOT innerHTML / outerHTML)
  *
  */
 
@@ -64,7 +66,10 @@ function addItem()
 	const addItemTextbox = document.getElementById("add-item-textbox");
 	const listOfItems    = document.getElementById("top");
 
-	const listItemDesc   = addItemTextbox.value;
+	const listItemDesc   = addItemTextbox.value.trim();
 
-	listOfItems.innerHTML += getHTMLItem(listItemDesc);
+	if (listItemDesc !== "")
+	{
+		listOfItems.innerHTML += getHTMLItem(listItemDesc);
+	}
 }
