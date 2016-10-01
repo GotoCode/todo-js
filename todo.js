@@ -11,9 +11,10 @@
  * Missing Features
  * 
  *  - disallow addition of 'empty' list items - DONE
- *  - array data structure to store list items
- * 	- persistent storage for entire to-do list
+ *  - array data structure to store list items - DONE
+ * 	- persistent storage for entire to-do list - DONE
  *  - use more sensible DOM methods (NOT innerHTML / outerHTML)
+ *  - push to-do list to localStorage only when the user exits (instead of on every update)
  *
  */
 
@@ -27,12 +28,55 @@ var current_id = 0;
 var itemsDict = {};
 
 
-
 // object to represent a single to-do list item
 
 function Item(desc)
 {
 	this.desc = desc;
+}
+
+
+// populate the list using preexisting data from localStorage, if any
+
+function populateList()
+{
+	// retrieve data from localStorage
+
+	if (testLocalStorage())
+	{
+		if (localStorage.getItem('itemsDict'))
+			itemsDict = JSON.parse(window.localStorage.itemsDict);
+	}
+
+	// render each to-do list item to the screen
+
+	const listOfItems = document.getElementById("top");
+
+	for (var i in Object.keys(itemsDict))
+	{
+		listOfItems.innerHTML += getHTMLItem(itemsDict[i].desc);
+	}
+}
+
+
+// tests if the client's browser can support Web Storage API
+
+function testLocalStorage()
+{
+	try
+	{
+		var localStorage = window.localStorage;
+
+		localStorage.setItem('test', 'test');
+		localStorage.getItem('test');
+
+		return true;
+	}
+
+	catch (e)
+	{
+		return false;
+	}
 }
 
 
@@ -77,9 +121,11 @@ function deleteItem(elemId)
 
 	console.log(itemsDict);
 
-	//console.log(deletedItem.outerHTML);
-
-	//console.log(elemId);
+	// store updated data model to localStorage
+	if (testLocalStorage())
+	{
+		window.localStorage.setItem('itemsDict', JSON.stringify(itemsDict));
+	}
 }
 
 
@@ -94,9 +140,16 @@ function addItem()
 
 	if (listItemDesc !== "")
 	{
+		// update the data model
 		itemsDict[current_id] = new Item(listItemDesc)
-		listOfItems.innerHTML += getHTMLItem(listItemDesc);
-	}
 
-	console.log(itemsDict);
+		// update the UI
+		listOfItems.innerHTML += getHTMLItem(listItemDesc);
+
+		// store updated data model to localStorage
+		if (testLocalStorage())
+		{
+			window.localStorage.setItem('itemsDict', JSON.stringify(itemsDict));
+		}
+	}
 }
