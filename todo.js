@@ -10,7 +10,7 @@
  *
  * Missing Features
  * 
- *  - disallow addition of 'empty' list items
+ *  - disallow addition of 'empty' list items - DONE
  *  - array data structure to store list items
  * 	- persistent storage for entire to-do list
  *  - use more sensible DOM methods (NOT innerHTML / outerHTML)
@@ -21,6 +21,19 @@
 // id the most recently added item
 
 var current_id = 0;
+
+// mapping between numeric ids and list items
+
+var itemsDict = {};
+
+
+
+// object to represent a single to-do list item
+
+function Item(desc)
+{
+	this.desc = desc;
+}
 
 
 /* 
@@ -49,17 +62,28 @@ function getHTMLItem(item_description)
 }
 
 
+// DELETE item from to-do list
+
 function deleteItem(elemId)
 {
-	const deletedItem = document.getElementById(elemId);
+	const deletedItem  = document.getElementById(elemId);
+	const indexDeleted = Number(/list-item(\d+)/.exec(deletedItem.id)[1]);
 
+	// update the data model
+	delete itemsDict[indexDeleted];
+
+	// update the UI
 	deletedItem.outerHTML = "";
+
+	console.log(itemsDict);
 
 	//console.log(deletedItem.outerHTML);
 
 	//console.log(elemId);
 }
 
+
+// ADD item to to-do list
 
 function addItem()
 {
@@ -70,6 +94,9 @@ function addItem()
 
 	if (listItemDesc !== "")
 	{
+		itemsDict[current_id] = new Item(listItemDesc)
 		listOfItems.innerHTML += getHTMLItem(listItemDesc);
 	}
+
+	console.log(itemsDict);
 }
